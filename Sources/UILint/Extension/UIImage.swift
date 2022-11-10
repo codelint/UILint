@@ -30,6 +30,14 @@ extension UIImage {
         if self.size.width < width && self.size.height < height {
             return self
         }
+        
+        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+        guard let imageSource = CGImageSourceCreateWithData(
+            (self.jpegData(compressionQuality: 1.0) ?? Data()) as CFData,
+            imageSourceOptions) else {
+            return UIImage()
+        }
+        
         let maxDimensionInPixels = max(
             width > 0 ? min(width, self.size.width) : self.size.width,
             height > 0 ? min(self.size.height, height) : self.size.height
@@ -41,7 +49,7 @@ extension UIImage {
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels
         ] as CFDictionary
-        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(self, 0, options) else {
+        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options) else {
             return UIImage()
         }
         
