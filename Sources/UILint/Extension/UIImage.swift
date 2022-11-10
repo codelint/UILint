@@ -25,7 +25,7 @@ extension UIImage {
         return UIImage(data: self.jpegData(compressionQuality: quality) ?? Data()) ?? UIImage()
     }
     
-    func resize(width: CGFloat, height: CGFloat = 0) {
+    func resize(width: CGFloat, height: CGFloat = 0) -> UIImage {
         
         if self.size.width < width && self.size.height < height {
             return self
