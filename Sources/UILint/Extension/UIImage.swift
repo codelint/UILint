@@ -15,7 +15,7 @@ extension UIImage {
         self.jpegData(compressionQuality: 1)?.base64EncodedString()
     }
     
-    var byteSize: Int {
+    var byteInt: Int {
         return NSData(data: self.jpegData(compressionQuality: 1) ?? Data()).count
     }
 
