@@ -122,3 +122,22 @@ extension View {
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
 }
+
+// 读取View尺寸（）
+@available(macOS 10.15, *)
+extension View {
+    func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { geometryProxy in
+                Color.clear
+                    .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+    }
+}
+@available(macOS 10.15, *)
+private struct SizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
