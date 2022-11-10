@@ -7,8 +7,10 @@
 
 import Foundation
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
-@available(macOS 10.15, *)
 extension View {
     
     // 支持 View{}.if() 的写法
@@ -38,7 +40,6 @@ extension View {
  *
  * @link https://www.hackingwithswift.com/quick-start/swiftui/swiftui-tips-and-tricks
  */
-@available(macOS 10.15, *)
 extension View {
     func iOS<Content: View>(_ modifier: (Self) -> Content) -> some View {
         #if os(iOS)
@@ -73,7 +74,6 @@ extension View {
     }
 }
 
-@available(macOS 10.15, *)
 struct EdgeBorder: Shape {
     var width: CGFloat
     var edges: [Edge]
@@ -114,7 +114,6 @@ struct EdgeBorder: Shape {
     }
 }
 
-@available(macOS 10.15, *)
 extension View {
     // 支持多边配置
     // 例子：.border(width: 3, edges: [.trailing], color: Color.orange)
@@ -124,7 +123,6 @@ extension View {
 }
 
 // 读取View尺寸（）
-@available(macOS 10.15, *)
 extension View {
     func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
         background(
@@ -136,8 +134,51 @@ extension View {
         .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
     }
 }
-@available(macOS 10.15, *)
+
 private struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
 }
+
+#if canImport(UIKit)
+extension View {
+    /*
+     // view保存为照片
+     // 用法举例
+     var textView: some View {
+     Text("Hello, SwiftUI")
+     }
+     var body: some View {
+     textView
+     Button("Save to image") {
+     let image = textView.snapshot()
+     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+     }
+     }
+     */
+    func snapshot() -> UIImage {
+        // Bug fixed for iOS 15: since iOS 15 it seems these two modifiers are required.
+        // @link: https://www.vinzius.com/post/how-to-remove-padding-when-snapshotting-swiftui-view-ios15/
+        let controller = UIHostingController(
+            rootView: self.ignoresSafeArea()
+                .fixedSize(horizontal: true, vertical: true)
+        )
+        
+        let view = controller.view
+        
+        let targetSize = controller.view.intrinsicContentSize
+        view?.bounds = CGRect(origin: .zero, size: targetSize)
+        view?.backgroundColor = .clear
+        
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        
+        return renderer.image { _ in
+            view?.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
+        }
+    }
+
+}
+
+
+
+#endif
