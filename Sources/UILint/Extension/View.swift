@@ -11,7 +11,7 @@ import SwiftUI
 import UIKit
 #endif
 
-extension View {
+public extension View {
     
     // 支持 View{}.if() 的写法
     /* 例子
@@ -40,7 +40,7 @@ extension View {
  *
  * @link https://www.hackingwithswift.com/quick-start/swiftui/swiftui-tips-and-tricks
  */
-extension View {
+public extension View {
     func iOS<Content: View>(_ modifier: (Self) -> Content) -> some View {
         #if os(iOS)
         return modifier(self)
@@ -74,11 +74,11 @@ extension View {
     }
 }
 
-struct EdgeBorder: Shape {
+public struct EdgeBorder: Shape {
     var width: CGFloat
     var edges: [Edge]
 
-    func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         var path = Path()
         for edge in edges {
             var x: CGFloat {
@@ -114,7 +114,7 @@ struct EdgeBorder: Shape {
     }
 }
 
-extension View {
+public extension View {
     // 支持多边配置
     // 例子：.border(width: 3, edges: [.trailing], color: Color.orange)
     func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
@@ -123,7 +123,7 @@ extension View {
 }
 
 // 读取View尺寸（）
-extension View {
+public extension View {
     func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geometryProxy in
@@ -141,7 +141,7 @@ private struct SizePreferenceKey: PreferenceKey {
 }
 
 #if canImport(UIKit)
-extension View {
+public extension View {
     /*
      // view保存为照片
      // 用法举例
