@@ -28,6 +28,59 @@ public extension View {
             self
         }
     }
+    
+    @ViewBuilder func whether<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func whether<YES: View, NO: View>(_ condition: Bool, yes: (Self) -> YES, orNo: (Self) -> NO) -> some View {
+        if condition {
+            yes(self)
+        } else {
+            orNo(self)
+        }
+    }
+    
+    @ViewBuilder func whether(_ condition: Bool, opacity: CGFloat = 1) -> some View {
+        if condition {
+            self.opacity(opacity)
+        } else {
+            self.opacity(0)
+        }
+    }
+    
+    
+    @ViewBuilder func opacityIf(_ condition: Bool, opacity: CGFloat = 0) -> some View {
+        if condition {
+            self.opacity(opacity)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func ifNotNil<Value, Content: View>(_ value: Optional<Value>, transform: (Self, Value) -> Content) -> some View {
+        if let v = value {
+            transform(self, v)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func with<Value, Content: View>(_ value: Optional<Value>, transform: (Self, Value) -> Content) -> some View {
+        if let v = value {
+            transform(self, v)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func tap<Content: View>(_ transform: (Self) -> Content) -> some View {
+        transform(self)
+    }
 
 
 }
