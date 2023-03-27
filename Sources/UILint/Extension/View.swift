@@ -173,6 +173,7 @@ public extension View {
     func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
+    
 }
 
 // 读取View尺寸（）
@@ -232,6 +233,16 @@ public extension View {
 
 }
 
-
-
 #endif
+
+
+extension View {
+    
+    @ViewBuilder func borderRadius(radius: CGFloat, color: Color, width: CGFloat) -> some View {
+        self.cornerRadius(radius).overlay {
+            RoundedRectangle(cornerRadius: radius, style: .continuous)
+                     .stroke(color, lineWidth: width)
+        }
+    }
+    
+}
