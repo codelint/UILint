@@ -236,14 +236,25 @@ public extension View {
 
 // 读取View尺寸（）
 public extension View {
+    
     func lint(onSize: @escaping (CGSize) -> Void) -> some View {
         background(
-            GeometryReader { geometryProxy in
+            GeometryReader { proxy in
                 Color.clear
-                    .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+                    .preference(key: SizePreferenceKey.self, value: proxy.size)
             }
         )
         .onPreferenceChange(SizePreferenceKey.self, perform: onSize)
+    }
+    
+    func readSize(_ perform: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { proxy in
+                Color.clear
+                    .preference(key: SizePreferenceKey.self, value: proxy.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self, perform: perform)
     }
 }
 
