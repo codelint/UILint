@@ -76,8 +76,6 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     
                 }
                 
-                
-                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 0){
                         ForEach(tags.indices, id: \.self) { idx in
