@@ -76,26 +76,7 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     
                 }
                 
-//                ScrollView(.horizontal, showsIndicators: false) {
-//                    HStack(spacing: 0){
-//                        ForEach(tags.indices, id: \.self) { idx in
-//                            Button(action: {
-//                                refresh(sel: idx)
-//                            }, label: {
-//                                VStack{
-//                                    itemContent(tags[idx], idx).lineLimit(1)
-//                                    // Text(tags[idx]).lineLimit(1)
-//                                }
-//                            })
-//                            .opacity(tagOpacity(sel: idx))
-//                            .font(tagFont(idx))
-//                            .frame(width: tagWidth)
-//                            .buttonStyle(.plain)
-//                            // .border(Color.red)
-//                        }
-//                    }
-//                    .offset(x: offset)
-//                }
+                
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 0){
@@ -117,17 +98,36 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     }
                     .offset(x: offset)
                 }
-                .iOS{ view in
+                .tap{ view in
                     if #available(macOS 13.0, iOS 16, *) {
                         view.scrollDisabled(true)
                     } else {
-                        view.disabled(true)
+                        view.disabled(true).background {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 0){
+                                    ForEach(tags.indices, id: \.self) { idx in
+                                        Button(action: {
+                                            refresh(sel: idx)
+                                        }, label: {
+                                            VStack{
+                                                itemContent(tags[idx], idx).lineLimit(1)
+                                                // Text(tags[idx]).lineLimit(1)
+                                            }
+                                        })
+                                        .opacity(tagOpacity(sel: idx))
+                                        .font(tagFont(idx))
+                                        .frame(width: tagWidth)
+                                        .buttonStyle(.plain)
+                                        // .border(Color.red)
+                                    }
+                                }
+                                .offset(x: offset)
+                            }
+                        }
                     }
                 }
                 .highPriorityGesture(drag)
             }
-            // .border(Color.red)
-            
         }
         .onAppear(){
             refresh(sel: selected)

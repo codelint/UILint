@@ -78,7 +78,7 @@ public extension View {
         }
     }
     
-    @ViewBuilder func tap<Content: View>(_ transform: (Self) -> Content) -> some View {
+    @ViewBuilder func tap<Content: View>(@ViewBuilder _ transform: (Self) -> Content) -> some View {
         transform(self)
     }
 
