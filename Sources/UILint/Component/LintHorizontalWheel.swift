@@ -76,6 +76,27 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     
                 }
                 
+//                ScrollView(.horizontal, showsIndicators: false) {
+//                    HStack(spacing: 0){
+//                        ForEach(tags.indices, id: \.self) { idx in
+//                            Button(action: {
+//                                refresh(sel: idx)
+//                            }, label: {
+//                                VStack{
+//                                    itemContent(tags[idx], idx).lineLimit(1)
+//                                    // Text(tags[idx]).lineLimit(1)
+//                                }
+//                            })
+//                            .opacity(tagOpacity(sel: idx))
+//                            .font(tagFont(idx))
+//                            .frame(width: tagWidth)
+//                            .buttonStyle(.plain)
+//                            // .border(Color.red)
+//                        }
+//                    }
+//                    .offset(x: offset)
+//                }
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 0){
                         ForEach(tags.indices, id: \.self) { idx in
@@ -96,15 +117,14 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     }
                     .offset(x: offset)
                 }
-                .disabled(true)
+                .iOS{ view in
+                    if #available(macOS 13.0, iOS 16, *) {
+                        view.scrollDisabled(true)
+                    } else {
+                        view.disabled(true)
+                    }
+                }
                 .highPriorityGesture(drag)
-//                .iOS{ view in
-//                    if #available(macOS 13.0, iOS 16, *) {
-//                        view.scrollDisabled(true)
-//                    } else {
-//                        view
-//                    }
-//                }
             }
             // .border(Color.red)
             
