@@ -7,14 +7,18 @@
 
 import SwiftUI
 
-struct LintSquare<Content:View>: View {
+public struct LintSquare<Content:View>: View {
     
     @State var width: CGFloat = 0
     @State var height: CGFloat = 0
     
     let content: () -> Content
     
-    var body: some View {
+    public init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content
+    }
+    
+    public var body: some View {
         ZStack{
             content()
                 .background(GeometryReader { proxy in
