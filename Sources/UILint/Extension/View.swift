@@ -13,6 +13,70 @@ import UIKit
 
 public extension View {
     
+    /**
+     *  sample
+     *   View().lint { view in
+     *      if yesOrNot {
+     *          view.opacity(1)
+     *      }else{
+     *          view.opacity(0)
+     *      }
+     *   }
+     */
+    @ViewBuilder func lint<Content: View>(@ViewBuilder _ view: (Self) -> Content) -> some View {
+        view(self)
+    }
+    
+    @ViewBuilder func lint<Content: View>(bool condition: Bool, @ViewBuilder view: (Self) -> Content) -> some View {
+        lint(bool: condition, yesView: view, noView: { $0 })
+    }
+    
+    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder yesView: (Self) -> YES, @ViewBuilder noView: (Self) -> NO) -> some View {
+        if condition {
+            yesView(self)
+        } else {
+            noView(self)
+        }
+    }
+    
+    @ViewBuilder func lint(opacityIf condition: Bool, _ opacity: CGFloat = 0) -> some View {
+        if condition {
+            self.opacity(opacity)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(notNil value: Optional<Value>, @ViewBuilder view transform: (Self, Value) -> Content) -> some View {
+        if let v = value {
+            transform(self, v)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(with value: Optional<Value>, @ViewBuilder view transform: (Self, Value) -> Content) -> some View {
+        if let v = value {
+            transform(self, v)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func lint<Content: View>(transform view: (Self) -> Content) -> some View {
+        view(self)
+    }
+    
+    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, yes: (Self) -> YES,  not: (Self) -> NO) -> some View {
+        if condition {
+            yes(self)
+        } else {
+            not(self)
+        }
+    }
+    
+    @ViewBuilder func lint<Content: View>(bool condition: Bool, transform: (Self) -> Content) -> some View {  lint(bool: condition, yes: transform, not: { $0 }) }
+    
     // 支持 View{}.if() 的写法
     /* 例子
      Text("Hello")
@@ -20,29 +84,18 @@ public extension View {
      view
      .frame(maxWidth: .infinity)
      }
+     * @deprecated
      */
     @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
+        self.lint(bool: condition, view: transform)
     }
     
-    @ViewBuilder func whether<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
+    @ViewBuilder func whether<Content: View>(_ condition: Bool, @ViewBuilder transform: (Self) -> Content) -> some View {
+        self.lint(bool: condition, view: transform)
     }
     
-    @ViewBuilder func whether<YES: View, NO: View>(_ condition: Bool, yes: (Self) -> YES, orNo: (Self) -> NO) -> some View {
-        if condition {
-            yes(self)
-        } else {
-            orNo(self)
-        }
+    @ViewBuilder func whether<YES: View, NO: View>(_ condition: Bool,@ViewBuilder yes: (Self) -> YES, @ViewBuilder orNo: (Self) -> NO) -> some View {
+        self.lint(bool: condition, yesView: yes, noView: orNo)
     }
     
     @ViewBuilder func whether(_ condition: Bool, opacity: CGFloat = 1) -> some View {
@@ -53,7 +106,6 @@ public extension View {
         }
     }
     
-    
     @ViewBuilder func opacityIf(_ condition: Bool, opacity: CGFloat = 0) -> some View {
         if condition {
             self.opacity(opacity)
@@ -62,27 +114,16 @@ public extension View {
         }
     }
     
-    @ViewBuilder func ifNotNil<Value, Content: View>(_ value: Optional<Value>, transform: (Self, Value) -> Content) -> some View {
-        if let v = value {
-            transform(self, v)
-        } else {
-            self
-        }
+    @ViewBuilder func ifNotNil<Value, Content: View>(_ value: Optional<Value>,@ViewBuilder transform: (Self, Value) -> Content) -> some View {
+        lint(notNil: value, view: transform)
     }
     
-    @ViewBuilder func with<Value, Content: View>(_ value: Optional<Value>, transform: (Self, Value) -> Content) -> some View {
-        if let v = value {
-            transform(self, v)
-        } else {
-            self
-        }
+    @ViewBuilder func with<Value, Content: View>(_ value: Optional<Value>, @ViewBuilder transform: (Self, Value) -> Content) -> some View {
+        lint(with: value, view: transform)
     }
     
-    @ViewBuilder func tap<Content: View>(@ViewBuilder _ transform: (Self) -> Content) -> some View {
-        transform(self)
-    }
-
-
+    @ViewBuilder func tap<Content: View>(@ViewBuilder _ transform: (Self) -> Content) -> some View { lint(transform) }
+    
 }
 
 /*
@@ -95,40 +136,53 @@ public extension View {
  */
 public extension View {
     
-    func iOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
+    /**
+     * view for ios
+     */
+    func lintIOS<Content: View>(@ViewBuilder view: (Self) -> Content) -> some View {
         #if os(iOS)
-        return modifier(self)
+        return view(self)
         #else
         return self
         #endif
     }
     
-    func macOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
+    /**
+     * view for macOS
+     */
+    func lintMacOS<Content: View>(@ViewBuilder view: (Self) -> Content) -> some View {
         #if os(macOS)
-        return modifier(self)
+        return view(self)
         #else
         return self
         #endif
     }
     
-    func tvOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
+    /**
+     * view for tvOS
+     */
+    func lintTvOS<Content: View>(@ViewBuilder view: (Self) -> Content) -> some View {
         #if os(tvOS)
-        return modifier(self)
+        return view(self)
         #else
         return self
         #endif
     }
     
-    func watchOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
+    /**
+     * view for watchOS
+     */
+    func lintWatchOS<Content: View>(@ViewBuilder view: (Self) -> Content) -> some View {
         #if os(watchOS)
-        return modifier(self)
+        return view(self)
         #else
         return self
         #endif
     }
+    
 }
 
-public struct EdgeBorder: Shape {
+public struct LintEdgeBorder: Shape {
     var width: CGFloat
     var edges: [Edge]
 
@@ -172,21 +226,24 @@ public extension View {
     // 支持多边配置
     // 例子：.border(width: 3, edges: [.trailing], color: Color.orange)
     func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
-        overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
+        overlay(LintEdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
     
+    func border(width: CGFloat, edge: Edge, color: Color) -> some View {
+        overlay(LintEdgeBorder(width: width, edges: [edge]).foregroundColor(color))
+    }
 }
 
 // 读取View尺寸（）
 public extension View {
-    func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    func lint(onSize: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geometryProxy in
                 Color.clear
                     .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
             }
         )
-        .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+        .onPreferenceChange(SizePreferenceKey.self, perform: onSize)
     }
 }
 
@@ -239,7 +296,7 @@ public extension View {
 
 public extension View {
     
-    @ViewBuilder func borderRadius(radius: CGFloat, color: Color, width: CGFloat) -> some View {
+    func borderRadius(radius: CGFloat, color: Color, width: CGFloat) -> some View {
         self.cornerRadius(radius).overlay {
             RoundedRectangle(cornerRadius: radius, style: .continuous)
                      .stroke(color, lineWidth: width)
