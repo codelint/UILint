@@ -27,7 +27,7 @@ public struct LintSquare<Content:View>: View {
                             width = proxy.size.width
                             height = proxy.size.height
                         }
-                })
+                }).opacity(0)
             content()
                 .frame(width: max(width, height), height: max(width, height))
         }
