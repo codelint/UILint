@@ -20,14 +20,11 @@ public struct LintSquare<Content:View>: View {
     
     public var body: some View {
         ZStack{
-            content()
-                .background(GeometryReader { proxy in
-                    Color.clear
-                        .onAppear() {
-                            width = proxy.size.width
-                            height = proxy.size.height
-                        }
-                }).opacity(0)
+            content().readSize({ size in
+                width = size.width
+                height = size.height
+            })
+            .opacity(0)
             content()
                 .frame(width: max(width, height), height: max(width, height))
         }
