@@ -11,6 +11,10 @@ public struct Center<Content: View>: View {
     
     public var content: () -> Content
     
+    public init(content: @escaping () -> Content) {
+        self.content = content
+    }
+    
     public var body: some View {
         VStack{
             Spacer(minLength: 1)
