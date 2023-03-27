@@ -77,7 +77,6 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                 }
                 
                 ScrollView(.horizontal, showsIndicators: false) {
-                    
                     HStack(spacing: 0){
                         ForEach(tags.indices, id: \.self) { idx in
                             Button(action: {
@@ -97,14 +96,15 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     }
                     .offset(x: offset)
                 }
+                .disabled(true)
                 .highPriorityGesture(drag)
-                .iOS{ view in
-                    if #available(macOS 13.0, iOS 16, *) {
-                        view.scrollDisabled(true)
-                    } else {
-                        view
-                    }
-                }
+//                .iOS{ view in
+//                    if #available(macOS 13.0, iOS 16, *) {
+//                        view.scrollDisabled(true)
+//                    } else {
+//                        view
+//                    }
+//                }
             }
             // .border(Color.red)
             
