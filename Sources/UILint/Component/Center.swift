@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct Center<Content: View>: View {
     
-    var content: () -> Content
+    public var content: () -> Content
     
     public var body: some View {
         VStack{
