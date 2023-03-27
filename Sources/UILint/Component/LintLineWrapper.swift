@@ -8,17 +8,17 @@
 import Foundation
 import SwiftUI
 
-protocol BadgeIdentifier: Equatable {
-    var id: String {get}
-    var name: String {get}
+protocol LintBadgeIdentifier: Equatable {
+    var lintId: String {get}
+    var lintName: String {get}
 }
 
-extension String: BadgeIdentifier {
-    public var id: String { get { self } }
-    public var name: String { get { self } }
+extension String: LintBadgeIdentifier {
+    public var lintId: String { get { self } }
+    public var lintName: String { get { self } }
 }
 
-public struct LineWrapper<Content: View, Value>: View {
+public struct LintLineWrapper<Content: View, Value>: View {
     
     var items = [Value]()
     
@@ -86,15 +86,15 @@ public struct LineWrapper<Content: View, Value>: View {
 }
 
 struct LineWrapper_Previews: PreviewProvider {
-    struct TestData: BadgeIdentifier {
-        var id: String = "hello"
+    struct TestData: LintBadgeIdentifier {
+        var lintId: String = "hello"
         
-        var name: String = "hello"
+        var lintName: String = "hello"
     }
     static var previews: some View {
         VStack{
-            LineWrapper(items: [TestData(), TestData(id: "2", name: "world")]) { item in
-                Text(item.name)
+            LintLineWrapper(items: [TestData(), TestData(lintId: "2", lintName: "world")]) { item in
+                Text(item.lintName)
                     .bold()
                     .font(.footnote)
                     .padding(.all, 5)

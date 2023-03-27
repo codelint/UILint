@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct FlopView<First: View, Second: View>: View {
+public struct LintFlopView<First: View, Second: View>: View {
     
     @Binding var isFirstPresent: Bool
     
@@ -40,10 +40,10 @@ struct FlopView_Previews: PreviewProvider {
     struct TestView: View {
         @State var first = true
         var body: some View {
-            FlopView(isFirstPresent: $first, first: {
+            LintFlopView(isFirstPresent: $first, first: {
                 ZStack{
                     Color(.red)
-                    Center{
+                    LintCenter{
                         Button(action: {
                             first = false
                         }, label: {
@@ -55,7 +55,7 @@ struct FlopView_Previews: PreviewProvider {
             }, second: {
                 ZStack{
                     Color(.yellow)
-                    Center{
+                    LintCenter{
                         Button(action: {
                             first = true
                         }, label: {

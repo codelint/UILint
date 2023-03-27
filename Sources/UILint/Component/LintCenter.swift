@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Center<Content: View>: View {
+public struct LintCenter<Content: View>: View {
     
     public var content: () -> Content
     
@@ -28,10 +28,10 @@ public struct Center<Content: View>: View {
     }
 }
 
-struct Center_Previews: PreviewProvider {
+struct LintCenter_Previews: PreviewProvider {
     static var previews: some View {
         VStack{
-            Center {
+            LintCenter {
                 Text("hello")
             }
         }
