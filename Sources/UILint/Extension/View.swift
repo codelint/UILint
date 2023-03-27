@@ -314,4 +314,10 @@ public extension View {
         }
     }
     
+    func lint(border: Color, width: CGFloat = 1, radius: CGFloat = 0) -> some View {
+        cornerRadius(radius).overlay {
+            RoundedRectangle(cornerRadius: radius, style: .continuous).stroke(border, lineWidth: width)
+        }
+    }
+    
 }
