@@ -94,7 +94,8 @@ public extension View {
  * @link https://www.hackingwithswift.com/quick-start/swiftui/swiftui-tips-and-tricks
  */
 public extension View {
-    func iOS<Content: View>(_ modifier: (Self) -> Content) -> some View {
+    
+    func iOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
         #if os(iOS)
         return modifier(self)
         #else
@@ -102,7 +103,7 @@ public extension View {
         #endif
     }
     
-    func macOS<Content: View>(_ modifier: (Self) -> Content) -> some View {
+    func macOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
         #if os(macOS)
         return modifier(self)
         #else
@@ -110,7 +111,7 @@ public extension View {
         #endif
     }
     
-    func tvOS<Content: View>(_ modifier: (Self) -> Content) -> some View {
+    func tvOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
         #if os(tvOS)
         return modifier(self)
         #else
@@ -118,7 +119,7 @@ public extension View {
         #endif
     }
     
-    func watchOS<Content: View>(_ modifier: (Self) -> Content) -> some View {
+    func watchOS<Content: View>(@ViewBuilder _ modifier: (Self) -> Content) -> some View {
         #if os(watchOS)
         return modifier(self)
         #else

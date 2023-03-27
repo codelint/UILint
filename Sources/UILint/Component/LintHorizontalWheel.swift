@@ -98,8 +98,13 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     .offset(x: offset)
                 }
                 .highPriorityGesture(drag)
-                .scrollDisabled(true)
-                
+                .iOS{ view in
+                    if #available(macOS 13.0, iOS 16, *) {
+                        view.scrollDisabled(true)
+                    } else {
+                        view
+                    }
+                }                
                 
             }
             // .border(Color.red)
