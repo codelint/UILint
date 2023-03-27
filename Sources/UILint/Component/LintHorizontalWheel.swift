@@ -98,7 +98,7 @@ public struct LintHorizontalWheel<Value: StringProtocol, Content: View>: View {
                     .offset(x: offset)
                 }
                 .highPriorityGesture(drag)
-                // .scrollDisabled(true)
+                .scrollDisabled(true)
                 
                 
             }
