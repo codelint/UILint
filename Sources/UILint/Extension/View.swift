@@ -237,7 +237,7 @@ public extension View {
 // 读取View尺寸（）
 public extension View {
     
-    func lint(onSize: @escaping (CGSize) -> Void) -> some View {
+    func lintSize(_ onSize: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { proxy in
                 Color.clear
