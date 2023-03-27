@@ -14,6 +14,12 @@ public struct FlopView<First: View, Second: View>: View {
     let first: () -> First
     let second: () -> Second
     
+    public init(isFirstPresent: Binding<Bool>, first: @escaping () -> First, second: @escaping () -> Second) {
+        self._isFirstPresent = isFirstPresent
+        self.first = first
+        self.second = second
+    }
+    
     public var body: some View {
         ZStack{
             first()

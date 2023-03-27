@@ -26,7 +26,7 @@ public struct LineWrapper<Content: View, Value>: View {
     
     @State private var totalHeight = CGFloat.zero
     
-    init(items: [Value], @ViewBuilder content: @escaping (_ item: Value) -> Content) {
+    public init(items: [Value], @ViewBuilder content: @escaping (_ item: Value) -> Content) {
         self.items = items
         self.item = content
     }
