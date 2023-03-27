@@ -236,7 +236,7 @@ public extension View {
 #endif
 
 
-extension View {
+public extension View {
     
     @ViewBuilder func borderRadius(radius: CGFloat, color: Color, width: CGFloat) -> some View {
         self.cornerRadius(radius).overlay {
