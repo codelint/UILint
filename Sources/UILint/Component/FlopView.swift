@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct FlopView<First: View, Second: View>: View {
+public struct FlopView<First: View, Second: View>: View {
     
     @Binding var isFirstPresent: Bool
     
     let first: () -> First
     let second: () -> Second
     
-    var body: some View {
+    public var body: some View {
         ZStack{
             first()
                 .opacity(isFirstPresent ? 1 : 0)

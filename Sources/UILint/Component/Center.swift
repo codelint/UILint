@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct Center<Content: View>: View {
+public struct Center<Content: View>: View {
     
     var content: () -> Content
     
-    var body: some View {
+    public var body: some View {
         VStack{
             Spacer(minLength: 1)
             HStack{

@@ -14,11 +14,11 @@ protocol BadgeIdentifier: Equatable {
 }
 
 extension String: BadgeIdentifier {
-    var id: String { get { self } }
-    var name: String { get { self } }
+    public var id: String { get { self } }
+    public var name: String { get { self } }
 }
 
-struct LineWrapper<Content: View, Value>: View {
+public struct LineWrapper<Content: View, Value>: View {
     
     var items = [Value]()
     
@@ -31,7 +31,7 @@ struct LineWrapper<Content: View, Value>: View {
         self.item = content
     }
 
-    var body: some View {
+    public var body: some View {
         GeometryReader { geometry in
             self.generateContent(in: geometry)
         }.frame(height: totalHeight)
