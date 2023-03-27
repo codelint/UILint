@@ -9,8 +9,8 @@ import SwiftUI
 
 public struct LintSquare<Content:View>: View {
     
-    @State var width: CGFloat = 0
-    @State var height: CGFloat = 0
+    @State var size: CGFloat = 0
+    // @State var height: CGFloat = 0
     
     let content: () -> Content
     
@@ -23,12 +23,11 @@ public struct LintSquare<Content:View>: View {
             content()
                 .opacity(0)
                 .readSize({ size in
-                    width = size.width
-                    height = size.height
+                    self.size = max(size.width, size.height)
                 })
             
             content()
-                .frame(width: max(width, height), height: max(width, height))
+                .frame(width: size, height: size)
         }
     }
 }
