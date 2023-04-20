@@ -23,7 +23,7 @@ public struct LintSquare<Content:View>: View {
             content()
                 .opacity(0)
                 .readSize({ size in
-                    self.size = max(size.width, size.height)
+                    self.size = min(size.width, size.height)
                 })
             
             content()
