@@ -63,6 +63,14 @@ public extension View {
         }
     }
     
+    @ViewBuilder func lint<Value, VIF: View, VELSE: View>(with value: Optional<Value>, @ViewBuilder vif: (Self, Value) -> VIF, @ViewBuilder velse: (Self) -> VELSE) -> some View {
+        if let value = value {
+            vif(self, value)
+        }else{
+            velse(self)
+        }
+    }
+    
     @ViewBuilder func lint<Content: View>(transform view: (Self) -> Content) -> some View {
         view(self)
     }
@@ -76,6 +84,12 @@ public extension View {
     }
     
     @ViewBuilder func lint<Content: View>(bool condition: Bool, transform: (Self) -> Content) -> some View {  lint(bool: condition, yes: transform, not: { $0 }) }
+    
+    @ViewBuilder func lint(vif bool: Bool) -> some View {
+        if bool {
+            self
+        }
+    }
     
     // 支持 View{}.if() 的写法
     /* 例子
