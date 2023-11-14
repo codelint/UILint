@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GestureButton<Content: View>: View {
+public struct GestureButton<Content: View>: View {
     
     @State var scrollX: CGFloat = 0
     @State var scrollY: CGFloat = 0
@@ -78,7 +78,7 @@ struct GestureButton<Content: View>: View {
         })
     }
     
-    var body: some View {
+    public var body: some View {
         Button(action: action, label: label)
             .offset(x: scrollX, y: scrollY)
             .highPriorityGesture(drag)

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct SwipeButton<Content:View>: View {
+public struct SwipeButton<Content:View>: View {
     
     @GestureState private var translation: CGSize = .zero
     @State var buttonWidth: CGFloat = .zero
@@ -202,7 +202,7 @@ struct SwipeButton<Content:View>: View {
         
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             ZStack(alignment: .leading){
                 HStack(spacing:0){

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LintTimer<Content: View>: View {
+public struct LintTimer<Content: View>: View {
     
     var interval: TimeInterval = 1
     @ViewBuilder let content: (Date) -> Content
@@ -24,7 +24,7 @@ struct LintTimer<Content: View>: View {
         self.content = content
     }
     
-    var body: some View {
+    public var body: some View {
         content(now)
             .onReceive(Timer.publish(every: interval, on: .main, in: .common).autoconnect()) { output in
                 now = Date()
