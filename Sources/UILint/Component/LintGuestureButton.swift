@@ -21,7 +21,7 @@ public struct LintGestureButton<Content: View>: View {
     let direction: Direction
     
     
-    init(action: @escaping () -> Void, @ViewBuilder label: @escaping () -> Content) {
+    public init(action: @escaping () -> Void, @ViewBuilder label: @escaping () -> Content) {
         self.action = action
         self.label = label
         self.move = nil
@@ -29,7 +29,7 @@ public struct LintGestureButton<Content: View>: View {
         self.direction = .both
     }
     
-    init(action: @escaping () -> Void,
+    public init(action: @escaping () -> Void,
          @ViewBuilder label: @escaping () -> Content,
          onMove: ((CGFloat, CGFloat) -> Void)?,
          onMoveEnd: ((CGFloat, CGFloat) -> Void)?) {
@@ -40,7 +40,7 @@ public struct LintGestureButton<Content: View>: View {
         self.direction = .both
     }
     
-    init(_ direction: Direction, action: @escaping () -> Void,
+    public init(_ direction: Direction, action: @escaping () -> Void,
          @ViewBuilder label: @escaping () -> Content,
          onMove: ((CGFloat, CGFloat) -> Void)?,
          onMoveEnd: ((CGFloat, CGFloat) -> Void)?) {
@@ -55,14 +55,14 @@ public struct LintGestureButton<Content: View>: View {
         LintGestureButton(direction, action: action, label: label, onMove: move, onMoveEnd: moveEnd)
     }
     
-    func onMove(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> LintGestureButton<Content> {
+    public func onMove(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> LintGestureButton<Content> {
         return LintGestureButton(action: action, label: label, onMove: { x,y in
             move?(x,y)
             callback(x,y)
         }, onMoveEnd: moveEnd)
     }
     
-    func onMoveEnd(_ callback: @escaping () -> Void) -> LintGestureButton<Content> {
+    public func onMoveEnd(_ callback: @escaping () -> Void) -> LintGestureButton<Content> {
         return LintGestureButton(action: action, label: label, onMove: move, onMoveEnd: { x,y in
             if let exist = moveEnd {
                 exist(x, y)
@@ -71,7 +71,7 @@ public struct LintGestureButton<Content: View>: View {
         })
     }
     
-    func onMoveEnd(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> LintGestureButton<Content> {
+    public func onMoveEnd(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> LintGestureButton<Content> {
         return LintGestureButton(action: action, label: label, onMove: move, onMoveEnd: { x, y in
             moveEnd?(x, y)
             callback(x,y)
@@ -108,7 +108,7 @@ public struct LintGestureButton<Content: View>: View {
             }
     }
     
-    enum Direction: String {
+    public enum Direction: String {
         case vertical, horizontal, both
     }
 }

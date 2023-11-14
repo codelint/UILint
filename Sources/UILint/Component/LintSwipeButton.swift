@@ -24,11 +24,11 @@ public struct LintSwipeButton<Content:View>: View {
     @ViewBuilder
     var content: () -> Content
     
-    init(@ViewBuilder content: @escaping () -> Content) {
+    public init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
     }
     
-    init(defines: [ButtonDefine], @ViewBuilder content: @escaping () -> Content) {
+    public init(defines: [ButtonDefine], @ViewBuilder content: @escaping () -> Content) {
         self.content = content
         for define in defines {
             switch define {
@@ -122,7 +122,7 @@ public struct LintSwipeButton<Content:View>: View {
         var action: ((@escaping () -> Void) -> Void)? = nil
     }
     
-    enum ButtonDefine{
+    public enum ButtonDefine{
         case custom(String, Color, Color, (@escaping () -> Void) -> Void)
         case quick(String, Color, (@escaping () -> Void) -> Void)
         case icon(String, Color, (@escaping () -> Void) -> Void)
