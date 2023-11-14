@@ -335,3 +335,23 @@ public extension View {
     }
     
 }
+
+
+/**
+ * helper component
+ */
+
+public extension View {
+    
+    @ViewBuilder func lint(refresh interval: TimeInterval) -> some View {
+        LintTimer(interval: interval, content: { date in
+            if date <= Date() {
+                self
+            }else{
+                self
+            }
+        })
+    }
+    
+    
+}
