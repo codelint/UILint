@@ -52,18 +52,18 @@ public struct LintGestureButton<Content: View>: View {
     }
     
     func direct(_ direction: Direction) -> Self {
-        GestureButton(direction, action: action, label: label, onMove: move, onMoveEnd: moveEnd)
+        LintGestureButton(direction, action: action, label: label, onMove: move, onMoveEnd: moveEnd)
     }
     
-    func onMove(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> GestureButton<Content> {
-        return GestureButton(action: action, label: label, onMove: { x,y in
+    func onMove(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> LintGestureButton<Content> {
+        return LintGestureButton(action: action, label: label, onMove: { x,y in
             move?(x,y)
             callback(x,y)
         }, onMoveEnd: moveEnd)
     }
     
-    func onMoveEnd(_ callback: @escaping () -> Void) -> GestureButton<Content> {
-        return GestureButton(action: action, label: label, onMove: move, onMoveEnd: { x,y in
+    func onMoveEnd(_ callback: @escaping () -> Void) -> LintGestureButton<Content> {
+        return LintGestureButton(action: action, label: label, onMove: move, onMoveEnd: { x,y in
             if let exist = moveEnd {
                 exist(x, y)
             }
@@ -71,8 +71,8 @@ public struct LintGestureButton<Content: View>: View {
         })
     }
     
-    func onMoveEnd(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> GestureButton<Content> {
-        return GestureButton(action: action, label: label, onMove: move, onMoveEnd: { x, y in
+    func onMoveEnd(_ callback: @escaping (CGFloat, CGFloat) -> Void) -> LintGestureButton<Content> {
+        return LintGestureButton(action: action, label: label, onMove: move, onMoveEnd: { x, y in
             moveEnd?(x, y)
             callback(x,y)
         })
