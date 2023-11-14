@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct GestureButton<Content: View>: View {
+public struct LintGestureButton<Content: View>: View {
     
     @State var scrollX: CGFloat = 0
     @State var scrollY: CGFloat = 0
@@ -117,7 +117,7 @@ public struct GestureButton<Content: View>: View {
 struct GestureButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack{
-            GestureButton(action: {
+            LintGestureButton(action: {
                 
             }, label: {
                 Text("Hello")

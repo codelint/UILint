@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct SwipeButton<Content:View>: View {
+public struct LintSwipeButton<Content:View>: View {
     
     @GestureState private var translation: CGSize = .zero
     @State var buttonWidth: CGFloat = .zero
@@ -346,7 +346,7 @@ struct SwipeButton_Previews: PreviewProvider {
         VStack{
             VStack{
                 
-                SwipeButton(defines: [
+                LintSwipeButton(defines: [
                     .common("Delete", .red, { next in
                         next()
                     }),
