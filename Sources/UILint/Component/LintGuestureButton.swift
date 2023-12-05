@@ -51,7 +51,7 @@ public struct LintGestureButton<Content: View>: View {
         self.direction = direction
     }
     
-    func direct(_ direction: Direction) -> Self {
+    public func direct(_ direction: Direction) -> Self {
         LintGestureButton(direction, action: action, label: label, onMove: move, onMoveEnd: moveEnd)
     }
     
