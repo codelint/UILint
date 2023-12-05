@@ -75,7 +75,7 @@ public extension View {
         view(self)
     }
     
-    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, yes: (Self) -> YES,  not: (Self) -> NO) -> some View {
+    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder yes: (Self) -> YES, @ViewBuilder not: (Self) -> NO) -> some View {
         if condition {
             yes(self)
         } else {
