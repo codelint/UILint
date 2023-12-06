@@ -12,6 +12,8 @@ public struct LintGestureButton<Content: View>: View {
     @State var scrollX: CGFloat = 0
     @State var scrollY: CGFloat = 0
     
+    @Environment(\.scenePhase) private var phase
+    
     let action: () -> Void
     let label: () -> Content
     
@@ -82,6 +84,12 @@ public struct LintGestureButton<Content: View>: View {
         Button(action: action, label: label)
             .offset(x: scrollX, y: scrollY)
             .highPriorityGesture(drag)
+            .onChange(of: phase, perform: { _ in
+                withAnimation(.linear) {
+                    scrollY = 0
+                    scrollX = 0
+                }
+            })
     }
     
     var drag: some Gesture {
