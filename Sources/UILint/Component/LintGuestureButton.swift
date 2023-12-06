@@ -85,9 +85,12 @@ public struct LintGestureButton<Content: View>: View {
             .offset(x: scrollX, y: scrollY)
             .highPriorityGesture(drag)
             .onChange(of: phase, perform: { _ in
-                withAnimation(.linear) {
-                    scrollY = 0
-                    scrollX = 0
+                if scrollX > 0.0 || scrollY > 0.0 {
+                    withAnimation(.linear) {
+                        scrollY = 0
+                        scrollX = 0
+                    }
+                    moveEnd?(0, 0)
                 }
             })
     }
