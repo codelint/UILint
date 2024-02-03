@@ -146,28 +146,42 @@ public struct LintSwipeButton<Content:View>: View {
         }
     }
     
+//    func buttonOffset(offset: Int) -> CGFloat {
+//        
+//        let pre:CGFloat = (options.enumerated()).reduce(0.0, { res, item in
+//            if item.offset < offset {
+//                return res + (widths[item.element.text] ?? 0)
+//            }
+//            return res
+//        })
+//        
+//        if let selected = self.selected {
+//            if selected < offset {
+//                return screenWidth + buttonWidth
+//            }
+//            if selected > offset {
+//                return screenWidth + scrollX
+//            }
+//            
+//            return screenWidth + scrollX
+//        }else{
+//            return screenWidth + scrollX + pre * unfoldRate
+//        }
+//        
+//    }
+    
     func buttonOffset(offset: Int) -> CGFloat {
-        
-        let pre:CGFloat = (options.enumerated()).reduce(0.0, { res, item in
-            if item.offset < offset {
-                return res + (widths[item.element.text] ?? 0)
-            }
-            return res
-        })
-        
-        if let selected = self.selected {
-            if selected < offset {
-                return screenWidth + buttonWidth
-            }
-            if selected > offset {
-                return screenWidth + scrollX
-            }
-            
-            return screenWidth + scrollX
-        }else{
-            return screenWidth + scrollX + pre * unfoldRate
+        var mo = 0.0
+        for idx in offset..<options.count {
+            let wid = widths[options[idx].text] ?? 0
+            // mo = mo + buttonWidth(offset: idx)
+            mo = mo + wid
         }
-        
+        if let selected = self.selected {
+            return 0
+        }else{
+            return mo*(1-unfoldRate)
+        }
     }
     
     func select(offset: Int?) {
@@ -217,7 +231,6 @@ public struct LintSwipeButton<Content:View>: View {
                             }
                         }
                 }
-                // .frame(width: screenWidth)
                 
                 if buttonWidth > 0 {
                     HStack{
@@ -225,8 +238,7 @@ public struct LintSwipeButton<Content:View>: View {
                         Spacer()
                     }
                     .frame(height: contentHeight)
-                    // .frame(width: screenWidth, height: contentHeight)
-                    .background(Color.black.opacity(0.02))
+                    .background(Color.black.opacity(0.1))
                     .opacity(unfoldRate)
                     // .offset(x: screenWidth*(scrollX + buttonWidth)/buttonWidth)
                     .onTapGesture {
@@ -239,30 +251,6 @@ public struct LintSwipeButton<Content:View>: View {
                     }
                 }
                 
-                ForEach(Array(self.options.enumerated()), id: \.offset) { e in
-                    Button(action: {
-                        if self.selected == nil && options[e.offset].isTip {
-                            select(offset: e.offset)
-                            return
-                        }
-                        
-                        if let f = options[e.offset].action {
-                            f({
-                                fold()
-                            })
-                        }else{
-                            fold()
-                        }
-                    }, label: {
-                        label(option: options[e.offset])
-                            .frame(width: buttonWidth(offset: e.offset), height: contentHeight)
-                            .background(options[e.offset].backgroundColor)
-                            
-                    })
-                    .offset(x: buttonOffset(offset: e.offset))
-                    .opacity(unfoldRate)
-                    .buttonStyle(.plain)
-                }
                 
                 ForEach(Array(self.options.enumerated()), id: \.offset) { e in
                     Button(action: {
@@ -276,6 +264,39 @@ public struct LintSwipeButton<Content:View>: View {
                         Color.clear.preference(key: ObservableSwipeButtonWidthPreferenceKey.self, value: [options[e.offset].text: proxy.size.width])
                     })
                     .opacity(0)
+                }
+                
+                HStack(spacing: 0){
+                    Spacer(minLength: 0)
+                    ForEach(Array(self.options.enumerated()), id: \.offset) { e in
+                        if selected == nil || selected == e.offset {
+                            Button(action: {
+                                if self.selected == nil && options[e.offset].isTip {
+                                    select(offset: e.offset)
+                                    return
+                                }
+                                
+                                if let f = options[e.offset].action {
+                                    f({
+                                        fold()
+                                    })
+                                }else{
+                                    fold()
+                                }
+                            }, label: {
+                                label(option: options[e.offset])
+                                    .frame(width: buttonWidth(offset: e.offset), height: contentHeight)
+                                    .background(options[e.offset].backgroundColor)
+                                
+                            })
+                            .offset(x: buttonOffset(offset: e.offset))
+                            .opacity(unfoldRate)
+                            .opacity(selected == nil ? 1 : (selected == e.offset ? 1 : 0))
+                            .scaleEffect(x: selected == nil ? 1 : (selected == e.offset ? 1 : 0))
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    
                 }
                     
                 
@@ -356,7 +377,7 @@ struct SwipeButton_Previews: PreviewProvider {
                 ], content: {
                     HStack{
                         Spacer()
-                        Text("hello")
+                        Text("Hello world").foregroundColor(.black)
                         Spacer()
                     }
                     .padding()
@@ -369,6 +390,7 @@ struct SwipeButton_Previews: PreviewProvider {
                 // .border(Color.black.opacity(0.3))
                 
             }
+            .frame(width: 320)
             .padding(32)
             .border(Color.red)
             .background(.ultraThinMaterial)
