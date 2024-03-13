@@ -27,17 +27,7 @@ public extension View {
         view(self)
     }
     
-    @ViewBuilder func lint<Content: View>(bool condition: Bool, @ViewBuilder view: (Self) -> Content) -> some View {
-        lint(bool: condition, yesView: view, noView: { $0 })
-    }
-    
-    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder yesView: (Self) -> YES, @ViewBuilder noView: (Self) -> NO) -> some View {
-        if condition {
-            yesView(self)
-        } else {
-            noView(self)
-        }
-    }
+    @ViewBuilder func lint<Content: View>(transform view: (Self) -> Content) -> some View { view(self) }
     
     @ViewBuilder func lint(opacityIf condition: Bool, _ opacity: CGFloat = 0) -> some View {
         if condition {
@@ -47,6 +37,10 @@ public extension View {
         }
     }
     
+    
+    /**
+     * Optional
+     */
     @ViewBuilder func lint<Value, Content: View>(notNil value: Optional<Value>, @ViewBuilder view transform: (Self, Value) -> Content) -> some View {
         if let v = value {
             transform(self, v)
@@ -71,19 +65,35 @@ public extension View {
         }
     }
     
-    @ViewBuilder func lint<Content: View>(transform view: (Self) -> Content) -> some View {
-        view(self)
-    }
-    
-    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder yes: (Self) -> YES, @ViewBuilder not: (Self) -> NO) -> some View {
-        if condition {
-            yes(self)
-        } else {
-            not(self)
+    @ViewBuilder func lint<Value, VELSE: View>(without value: Optional<Value>, @ViewBuilder transform: (Self) -> VELSE) -> some View {
+        if nil == value {
+            transform(self)
+        }else{
+            self
         }
     }
     
-    @ViewBuilder func lint<Content: View>(bool condition: Bool, transform: (Self) -> Content) -> some View {  lint(bool: condition, yes: transform, not: { $0 }) }
+    /**
+     * Bool
+     */
+    
+    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder vif yes: @escaping (Self) -> YES, @ViewBuilder velse not: @escaping (Self) -> NO) -> some View {
+        if condition { yes(self) } else { not(self) }
+    }
+    
+    @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder yes: @escaping (Self) -> YES, @ViewBuilder not: @escaping (Self) -> NO) -> some View {
+        if condition { yes(self) } else { not(self) }
+    }
+    
+    @ViewBuilder func lint<Content: View>(bool condition: Bool, @ViewBuilder view: @escaping (Self) -> Content) -> some View {
+        lint(bool: condition, yes: view, not: { $0 })
+    }
+    
+    @ViewBuilder func lint<Content: View>(vif condition: Bool, @ViewBuilder transform: @escaping (Self) -> Content) -> some View { lint(bool: condition, yes: transform, not: { $0 }) }
+    
+    @ViewBuilder func lint<Content: View>(velse condition: Bool, @ViewBuilder transform: @escaping (Self) -> Content) -> some View { lint(bool: condition, yes: { $0 }, not: transform) }
+    
+    @ViewBuilder func lint<Content: View>(bool condition: Bool, transform: @escaping (Self) -> Content) -> some View {  lint(vif: condition, transform: transform) }
     
     @ViewBuilder func lint(vif bool: Bool) -> some View {
         if bool {
@@ -100,16 +110,19 @@ public extension View {
      }
      * @deprecated
      */
-    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: @escaping (Self) -> Content) -> some View {
         self.lint(bool: condition, view: transform)
     }
     
-    @ViewBuilder func whether<Content: View>(_ condition: Bool, @ViewBuilder transform: (Self) -> Content) -> some View {
+    /**
+     * naming more human, but easy to conflict with other lib
+     */
+    @ViewBuilder func whether<Content: View>(_ condition: Bool, @ViewBuilder transform: @escaping (Self) -> Content) -> some View {
         self.lint(bool: condition, view: transform)
     }
     
-    @ViewBuilder func whether<YES: View, NO: View>(_ condition: Bool,@ViewBuilder yes: (Self) -> YES, @ViewBuilder orNo: (Self) -> NO) -> some View {
-        self.lint(bool: condition, yesView: yes, noView: orNo)
+    @ViewBuilder func whether<YES: View, NO: View>(_ condition: Bool,@ViewBuilder yes: @escaping (Self) -> YES, @ViewBuilder orNo: @escaping (Self) -> NO) -> some View {
+        self.lint(bool: condition, yes: yes, not: orNo)
     }
     
     @ViewBuilder func whether(_ condition: Bool, opacity: CGFloat = 1) -> some View {
@@ -140,6 +153,86 @@ public extension View {
     
 }
 
+public extension View {
+    
+    @ViewBuilder func lint<Value, Content: View>(within values: [Optional<Value>], @ViewBuilder view transform: (Self, Value) -> Content) -> some View {
+        if let v = values.reduce(nil, { $0 == nil ? $1 : $0 }) {
+            transform(self, v)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(withs values: [Optional<Value>], @ViewBuilder view content: (Self, [Value]) -> Content) -> some View {
+        let notNils = values.filter({ $0 != nil }).map({ $0! })
+        if notNils.count == values.count {
+            content(self, notNils)
+        }else{
+            self
+        }
+    }
+    
+    @ViewBuilder func lint<Value, VIF: View, VELSE: View>(within values: [Optional<Value>], @ViewBuilder exist: (Self, Value) -> VIF, @ViewBuilder nothing: (Self) -> VELSE) -> some View {
+        if let v = values.reduce(nil, { $0 != nil ? $1 : $0 }) {
+            exist(self, v)
+        } else {
+            nothing(self)
+        }
+    }
+    
+    @ViewBuilder func lint(horizontal padding: CGFloat) -> some View {
+        HStack(spacing: padding){
+            Spacer(minLength: padding)
+            self
+            Spacer(minLength: padding)
+        }
+    }
+    
+    @ViewBuilder func lint(vertical padding: CGFloat) -> some View {
+        VStack(spacing: padding){
+            Spacer(minLength: padding)
+            self
+            Spacer(minLength: padding)
+        }
+    }
+    
+    @ViewBuilder func lint(scroll axis: Axis.Set, showsIndicators: Bool = false) -> some View {
+        ScrollView(axis, showsIndicators: false) {
+            self
+        }
+    }
+    
+    @ViewBuilder func lint(center padding: CGFloat) -> some View {
+        self.lint(horizontal: padding).lint(vertical: padding)
+    }
+    
+}
+
+/**
+ * UserDefaults related
+ */
+public extension View {
+    @ViewBuilder func lint<Value, VIF: View, VELSE: View>(userKey key: String, @ViewBuilder vif: (Self, Value) -> VIF, @ViewBuilder velse: (Self) -> VELSE) -> some View {
+        if let value = UserDefaults.standard.object(forKey: key) as? Value {
+            vif(self, value)
+        }else{
+            velse(self)
+        }
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(userKey key: String, @ViewBuilder vif transform: (Self, Value) -> Content) -> some View {
+        lint(userKey: key, vif: transform, velse: { $0 })
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(userKey key: String, @ViewBuilder velse transform: (Self) -> Content) -> some View {
+        if nil == UserDefaults.standard.object(forKey: key) as? Value {
+            transform(self)
+        }else{
+            self
+        }
+    }
+}
+
 /*
  * 平台判定条件封装
  * 用法：
@@ -160,6 +253,7 @@ public extension View {
         return self
         #endif
     }
+    
     
     /**
      * view for macOS
@@ -352,6 +446,5 @@ public extension View {
             }
         })
     }
-    
-    
+
 }

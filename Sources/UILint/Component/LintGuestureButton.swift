@@ -81,7 +81,9 @@ public struct LintGestureButton<Content: View>: View {
     }
     
     public var body: some View {
-        Button(action: action, label: label)
+        Button(action: {
+            action()
+        }, label: label)
             .offset(x: scrollX, y: scrollY)
             .highPriorityGesture(drag)
             .onChange(of: phase, perform: { _ in

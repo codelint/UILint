@@ -21,8 +21,7 @@ public struct LintSwipeButton<Content:View>: View {
     
     var options: [ButtonOption] = []
     
-    @ViewBuilder
-    var content: () -> Content
+    @ViewBuilder var content: () -> Content
     
     public init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
@@ -177,7 +176,7 @@ public struct LintSwipeButton<Content:View>: View {
             // mo = mo + buttonWidth(offset: idx)
             mo = mo + wid
         }
-        if let selected = self.selected {
+        if let _ = self.selected {
             return 0
         }else{
             return mo*(1-unfoldRate)
