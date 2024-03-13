@@ -11,6 +11,11 @@ import UIKit
 
 public extension UIColor {
     
+    func clamped<Value: Comparable>(_ value: Value, to range: ClosedRange<Value>) -> Value {
+        // CGFloat(max(0.0, 2.0))
+        return self > range.upperBound ? range.upperBound : (self < range.lowerBound ? range.lowerBound : self)
+    }
+    
     var ARGBHex: String {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
@@ -26,23 +31,24 @@ public extension UIColor {
     var hexRevert: String {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        red = (1 - red).clamped(to: 0...1)
-        green = (1 - green).clamped(to: 0...1)
-        blue = (1 - blue).clamped(to: 0...1)
+        red = clamped((1 - red), to: 0...1)
+        green = clamped((1 - green), to: 0...1)
+        blue = clamped((1 - blue), to: 0...1)
         return String(format: "#%02X%02X%02X", Int(red*255), Int(green*255), Int(blue*255)).uppercased()
     }
     
     var hexGradient: String {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let gray = ((green + blue + red)/3).clamped(to: 0...1)*255
+        let gray = clamped(((green + blue + red)/3), to: 0...1)*255
+        let gray = clamped(((green + blue + red)/3), to: 0...1)*255
         return String(format: "#%02X%02X%02X", gray.int, gray.int, gray.int).uppercased()
     }
     
     var intGradient: Int {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return Int(((green + blue + red)/3).clamped(to: 0...1)*255)
+        return Int(clamped(((green + blue + red)/3), to: 0...1)*255)
     }
     
     func add(brightness theta: CGFloat) -> UIColor {
