@@ -11,7 +11,7 @@ import UIKit
 
 public extension UIColor {
     
-    func clamped(_ value: Value, to range: ClosedRange<CGFloat>) -> CGFloat {
+    func clamped(_ value: CGFloat, to range: ClosedRange<CGFloat>) -> CGFloat {
         self > range.upperBound ? range.upperBound : (self < range.lowerBound ? range.lowerBound : self)
     }
     
