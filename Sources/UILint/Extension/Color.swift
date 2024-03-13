@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-extension Color {
+public extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
@@ -38,7 +38,7 @@ extension Color {
 }
 
 #if canImport(UIKit)
-extension Color {
+public extension Color {
     
     var lintRevert: Color { Color(hex: UIColor(self).hexRevert) }
     

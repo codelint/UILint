@@ -6,9 +6,10 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
-extension UIColor {
+import UIKit
+
+public extension UIColor {
     
     var ARGBHex: String {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
