@@ -40,7 +40,6 @@ public extension UIColor {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let gray = clamped(((green + blue + red)/3), to: 0...1)*255
-        let gray = clamped(((green + blue + red)/3), to: 0...1)*255
         return String(format: "#%02X%02X%02X", Int(gray), Int(gray), Int(gray)).uppercased()
     }
     
