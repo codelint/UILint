@@ -12,7 +12,7 @@ import UIKit
 public extension UIColor {
     
     func clamped(_ value: CGFloat, to range: ClosedRange<CGFloat>) -> CGFloat {
-        self > range.upperBound ? range.upperBound : (self < range.lowerBound ? range.lowerBound : self)
+        value > range.upperBound ? range.upperBound : (value < range.lowerBound ? range.lowerBound : value)
     }
     
     var ARGBHex: String {
