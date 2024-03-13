@@ -14,13 +14,13 @@ public extension UIColor {
     var ARGBHex: String {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return String(format: "#%02X%02X%02X%02X", (alpha*255).int, (red*255).int, (green*255).int, (blue*255).int).uppercased()
+        return String(format: "#%02X%02X%02X%02X", Int(alpha*255), Int(red*255), Int(green*255), Int(blue*255)).uppercased()
     }
     
     var RGBHex: String {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return String(format: "#%02X%02X%02X", (red*255).int, (green*255).int, (blue*255).int).uppercased()
+        return String(format: "#%02X%02X%02X", Int(red*255), Int(green*255), Int(blue*255)).uppercased()
     }
     
     var hexRevert: String {
@@ -29,7 +29,7 @@ public extension UIColor {
         red = (1 - red).clamped(to: 0...1)
         green = (1 - green).clamped(to: 0...1)
         blue = (1 - blue).clamped(to: 0...1)
-        return String(format: "#%02X%02X%02X", (red*255).int, (green*255).int, (blue*255).int).uppercased()
+        return String(format: "#%02X%02X%02X", Int(red*255), Int(green*255), Int(blue*255)).uppercased()
     }
     
     var hexGradient: String {
@@ -42,7 +42,7 @@ public extension UIColor {
     var intGradient: Int {
         var red = CGFloat.zero, blue = CGFloat.zero, green = CGFloat.zero, alpha = CGFloat.zero
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return (((green + blue + red)/3).clamped(to: 0...1)*255).int
+        return Int(((green + blue + red)/3).clamped(to: 0...1)*255)
     }
     
     func add(brightness theta: CGFloat) -> UIColor {
