@@ -11,9 +11,8 @@ import UIKit
 
 public extension UIColor {
     
-    func clamped<Value: Comparable>(_ value: Value, to range: ClosedRange<Value>) -> Value {
-        // CGFloat(max(0.0, 2.0))
-        return self > range.upperBound ? range.upperBound : (self < range.lowerBound ? range.lowerBound : self)
+    func clamped(_ value: Value, to range: ClosedRange<CGFloat>) -> CGFloat {
+        self > range.upperBound ? range.upperBound : (self < range.lowerBound ? range.lowerBound : self)
     }
     
     var ARGBHex: String {
@@ -42,7 +41,7 @@ public extension UIColor {
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let gray = clamped(((green + blue + red)/3), to: 0...1)*255
         let gray = clamped(((green + blue + red)/3), to: 0...1)*255
-        return String(format: "#%02X%02X%02X", gray.int, gray.int, gray.int).uppercased()
+        return String(format: "#%02X%02X%02X", Int(gray), Int(gray), Int(gray)).uppercased()
     }
     
     var intGradient: Int {
