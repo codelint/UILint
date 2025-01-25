@@ -173,7 +173,7 @@ public extension View {
     }
     
     @ViewBuilder func lint<Value, VIF: View, VELSE: View>(within values: [Optional<Value>], @ViewBuilder exist: (Self, Value) -> VIF, @ViewBuilder nothing: (Self) -> VELSE) -> some View {
-        if let v = values.reduce(nil, { $0 != nil ? $1 : $0 }) {
+        if let v = values.reduce(nil, { $0 == nil ? $1 : $0 }) {
             exist(self, v)
         } else {
             nothing(self)
