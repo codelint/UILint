@@ -60,7 +60,7 @@ struct WithPresentModifierTesting: View {
     }
 }
 #Preview {
-    WithPresentModifierTesting()
+    WithPresentModifierTesting().frame(width:320, height: 192, alignment: .center)
 }
 
 #endif

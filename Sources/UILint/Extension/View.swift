@@ -37,7 +37,6 @@ public extension View {
         }
     }
     
-    
     /**
      * Optional
      */
@@ -76,7 +75,6 @@ public extension View {
     /**
      * Bool
      */
-    
     @ViewBuilder func lint<YES: View, NO: View>(bool condition: Bool, @ViewBuilder vif yes: @escaping (Self) -> YES, @ViewBuilder velse not: @escaping (Self) -> NO) -> some View {
         if condition { yes(self) } else { not(self) }
     }
@@ -100,6 +98,75 @@ public extension View {
             self
         }
     }
+    
+    /**
+     * overlay / background
+     */
+    
+    @ViewBuilder func lint<Content: View, Placeholder: View>(bool yesOrNot: Bool, @ViewBuilder overlay content: @escaping () -> Content, @ViewBuilder velse not: @escaping () -> Placeholder) -> some View {
+        self.overlay(content: {
+            if yesOrNot {
+                content()
+            }else{
+                not()
+            }
+        })
+    }
+    
+    @ViewBuilder func lint<Content: View>(bool condition: Bool, @ViewBuilder overlay content: @escaping () -> Content) -> some View {
+        self.overlay(content: {
+            if condition {
+                content()
+            }
+        })
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(with value: Optional<Value>, @ViewBuilder overlay transform: (Value) -> Content) -> some View {
+        overlay(content: {
+            if let value = value {
+                transform(value)
+            }
+        })
+    }
+    
+    @ViewBuilder func lint<Value, Content: View, Placeholder: View>(with value: Optional<Value>, @ViewBuilder overlay transform: (Value) -> Content, @ViewBuilder placeholder: () -> Placeholder) -> some View {
+        overlay(content: {
+            if let value = value { transform(value) } else{ placeholder() }
+        })
+    }
+    
+    @ViewBuilder func lint<Content: View, Placeholder: View>(bool yesOrNot: Bool, @ViewBuilder background content: @escaping () -> Content, @ViewBuilder velse not: @escaping () -> Placeholder) -> some View {
+        self.background(content: {
+            if yesOrNot {
+                content()
+            }else{
+                not()
+            }
+        })
+    }
+    
+    @ViewBuilder func lint<Content: View>(bool condition: Bool, @ViewBuilder background content: @escaping () -> Content) -> some View {
+        self.background(content: {
+            if condition {
+                content()
+            }
+        })
+    }
+    
+    @ViewBuilder func lint<Value, Content: View>(with value: Optional<Value>, @ViewBuilder background transform: (Value) -> Content) -> some View {
+        self.background(content: {
+            if let value = value {
+                transform(value)
+            }
+        })
+    }
+    
+    @ViewBuilder func lint<Value, Content: View, Placeholder: View>(with value: Optional<Value>, @ViewBuilder background transform: (Value) -> Content, @ViewBuilder placeholder: () -> Placeholder) -> some View {
+        background(content: {
+            if let value = value { transform(value) } else{ placeholder() }
+        })
+    }
+    
     
     // 支持 View{}.if() 的写法
     /* 例子
@@ -237,9 +304,9 @@ public extension View {
  * 平台判定条件封装
  * 用法：
  *    Text("Hello World")
- *        .iOS { $0.padding(10) }
+ *        .lintIOS { $0.padding(10) }
+ *        .lint(iOS: { $0 }, velse: { Text("Developing..." })
  *
- * @link https://www.hackingwithswift.com/quick-start/swiftui/swiftui-tips-and-tricks
  */
 public extension View {
     
@@ -253,7 +320,6 @@ public extension View {
         return self
         #endif
     }
-    
     
     /**
      * view for macOS
@@ -285,6 +351,41 @@ public extension View {
         return view(self)
         #else
         return self
+        #endif
+    }
+    
+    /**
+     * more
+     */
+    func lint<Content: View, VElse: View>(@ViewBuilder iOS view: (Self) -> Content, velse: (Self) -> VElse) -> some View {
+        #if os(iOS)
+        return view(self)
+        #else
+        return velse(self)
+        #endif
+    }
+    
+    func lint<Content: View, VElse: View>(@ViewBuilder macOS view: (Self) -> Content, velse: (Self) -> VElse) -> some View {
+        #if os(macOS)
+        return view(self)
+        #else
+        return velse(self)
+        #endif
+    }
+    
+    func lint<Content: View, VElse: View>(@ViewBuilder tvOS view: (Self) -> Content, velse: (Self) -> VElse) -> some View {
+        #if os(tvOS)
+        return view(self)
+        #else
+        return velse(self)
+        #endif
+    }
+    
+    func lint<Content: View, VElse: View>(@ViewBuilder watchOS view: (Self) -> Content, velse: (Self) -> VElse) -> some View {
+        #if os(watchOS)
+        return view(self)
+        #else
+        return velse(self)
         #endif
     }
     

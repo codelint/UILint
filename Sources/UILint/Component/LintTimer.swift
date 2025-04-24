@@ -15,12 +15,12 @@ public struct LintTimer<Content: View>: View {
     // @State private var timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     @State private var now = Date()
     
-    init(interval: TimeInterval, content: @escaping (Date) -> Content) {
+    public init(interval: TimeInterval, content: @escaping (Date) -> Content) {
         self.content = content
         self.interval = interval
     }
     
-    init(content: @escaping (Date) -> Content) {
+    public init(content: @escaping (Date) -> Content) {
         self.content = content
     }
     
