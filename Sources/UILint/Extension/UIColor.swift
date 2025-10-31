@@ -79,4 +79,29 @@ public extension UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: alpha)
     }
 }
+
+public extension UIColor {
+    
+    func lint(distance color: UIColor) -> CGFloat {
+        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
+        
+        self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+        color.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+        
+        let redDiff = r1 - r2
+        let greenDiff = g1 - g2
+        let blueDiff = b1 - b2
+        
+        return sqrt(redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff)
+    }
+    
+    func lint(nearest a: UIColor, _ b: UIColor) -> UIColor {
+        return lint(distance: a) <= lint(distance: b) ? a : b
+    }
+    
+    func lint(further a: UIColor, _ b: UIColor) -> UIColor {
+        return lint(distance: a) > lint(distance: b) ? a : b
+    }
+}
 #endif
