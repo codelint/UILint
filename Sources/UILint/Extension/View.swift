@@ -547,5 +547,35 @@ public extension View {
             }
         })
     }
+    
+    @ViewBuilder func onAppear(after ms: Int, perform next: @escaping () -> Void) -> some View {
+        onAppear() {
+            if ms > 0 {
+                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(ms)), execute: {
+                    next()
+                })
+            }else{
+                DispatchQueue.main.async {
+                    next()
+                }
+            }
+        }
+    }
 
+}
+
+
+/**
+ * compatibility
+ */
+public extension View {
+    @ViewBuilder func lint<Value: Equatable>(changeOf value: Value, perform: @escaping (Value) -> Void) -> some View {
+        if #available(iOS 17, *) {
+            onChange(of: value, { _, value in
+                perform(value)
+            })
+        }else{
+            onChange(of: value, perform: perform)
+        }
+    }
 }

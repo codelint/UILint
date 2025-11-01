@@ -78,5 +78,10 @@ public extension Color {
     
     func add(brightness: CGFloat) -> Color { Color(uiColor: lintUI.add(brightness: brightness)) }
     
+//    func lint(opacity: CGFloat, base: CGFloat = 0.0) -> Color {
+//        let b = min(1.0, max(0.0, base))
+//        return self.opacity(min(1.0, max(0.0, b + (1-b)*opacity)))
+//    }
+    
 }
 #endif
